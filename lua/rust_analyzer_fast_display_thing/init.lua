@@ -192,6 +192,9 @@ function M.setup(opts)
             log_info "Restarting Rust Analzyer..."
             local rust_analyzer_default = require("lspconfig.server_configurations.rust_analyzer").default_config
             vim.lsp.buf.add_workspace_folder(rust_fast_dir)
+            for _, x in pairs(vim.lsp.buf.list_workspace_folders()) do
+              log_info(x)
+            end
             local client = vim.lsp.start_client {
               cmd = rust_analyzer_default.cmd,
               name = "rust_analyzer",
