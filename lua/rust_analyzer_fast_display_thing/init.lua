@@ -168,7 +168,7 @@ function M.setup(opts)
         local cargo_root_path = make_path(cargo_root)
         local rust_fast_path = make_path(rust_fast_dir)
         local exception = function_that_does_a_thing(make_path(buffer_path), cargo_root_path)
-        local pseudo_file = (rust_fast_path .. unpath(exception))
+        local pseudo_file = (unpath(rust_fast_path) .. unpath(exception))
 
         symlink_dir(cargo_root_path, rust_fast_path, exception)
 
