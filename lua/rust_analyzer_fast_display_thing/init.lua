@@ -191,7 +191,7 @@ function M.setup(opts)
             if ret == nil then return end
             if #ret ~= 1 then log_err "Multiple Rust Analzyers found" end
             local rust_analyzer = ret[1]
-            rust_analyzer.stop(true)
+            rust_analyzer.stop(false)
             log_info "Rust Analzyer should now stop"
             stop_request_sent = true
           end,
