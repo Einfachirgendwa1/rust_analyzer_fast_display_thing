@@ -190,10 +190,7 @@ function M.setup(opts)
             if #ret ~= 1 then log_err "Multiple Rust Analzyers found" end
             local rust_analyzer = ret[1]
             rust_analyzer.stop(true)
-            while not rust_analyzer.is_stopped() do
-              vim.defer_fn(function() end, 100) -- Wait for 100 millis
-            end
-            log_info "Rust Analzyer stopped!"
+            log_info "Rust Analzyer should stop"
           end,
         })
 
