@@ -3,7 +3,7 @@ local M = {}
 ---@param opts {rust_fast_dir: string?}?
 function M.setup(opts)
   opts = opts or {}
-  local rust_fast_dir = opts.rust_fast_dir or "/var/tmp/rust_fast"
+  local rust_fast_dir = opts.rust_fast_dir or "/tmp/rust_fast_dir"
 
   ---@param msg string
   ---@return nil
