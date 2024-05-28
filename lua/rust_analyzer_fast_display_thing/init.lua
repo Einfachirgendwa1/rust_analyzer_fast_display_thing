@@ -137,7 +137,7 @@ function M.setup(opts)
     end
   end
 
-  if not exists(rust_fast_dir) then vim.fn.mkdir(rust_fast_dir) end
+  if not exists(rust_fast_dir) then vim.fn.mkdir(rust_fast_dir, "p") end
 
   vim.api.nvim_create_autocmd({ "VimEnter" }, {
     callback = function()
