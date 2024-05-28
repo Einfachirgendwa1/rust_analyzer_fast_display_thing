@@ -172,7 +172,7 @@ function M.setup(opts)
 
         symlink_dir(cargo_root_path, rust_fast_path, exception)
 
-        vim.cmd.bd(vim.api.nvim_get_current_buf())
+        vim.cmd.bd()
         vim.cmd.e(pseudo_file)
 
         vim.api.nvim_buf_attach(0, false, {
