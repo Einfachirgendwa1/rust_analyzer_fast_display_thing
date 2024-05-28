@@ -1,4 +1,6 @@
-return function()
+local M = {}
+
+function M.settings(_)
   vim.api.nvim_out_write "Test"
   ---@param msg string
   ---@return nil
@@ -194,3 +196,5 @@ return function()
     end,
   })
 end
+
+return M
