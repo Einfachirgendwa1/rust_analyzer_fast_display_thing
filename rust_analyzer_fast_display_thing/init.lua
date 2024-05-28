@@ -1,3 +1,4 @@
+vim.api.nvim_out_write "Test"
 ---@param msg string
 ---@return nil
 local function log_err(msg)
