@@ -191,6 +191,7 @@ function M.setup(opts)
             stop_request_sent = true
             log_info "Restarting Rust Analzyer..."
             vim.lsp.start_client {
+              cmd = require("lspconfig.server_configurations.rust_analyzer").default_config.cmd,
               root_dir = rust_fast_dir,
             }
           end,
