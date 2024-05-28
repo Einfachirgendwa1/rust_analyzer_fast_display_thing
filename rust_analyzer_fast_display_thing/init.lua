@@ -1,6 +1,6 @@
 local M = {}
 
-function M.settings(_)
+function M.setup(_)
   vim.api.nvim_out_write "Test"
   ---@param msg string
   ---@return nil
