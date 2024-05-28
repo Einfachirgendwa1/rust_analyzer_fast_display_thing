@@ -183,14 +183,17 @@ function M.setup(opts)
           return
         end
 
+        local stop_request_sent = false
         vim.api.nvim_create_autocmd("LspAttach", {
           callback = function()
+            if stop_request_sent then return end
             local ret = vim.lsp.get_clients { name = "rust_analyzer" }
             if ret == nil then return end
             if #ret ~= 1 then log_err "Multiple Rust Analzyers found" end
             local rust_analyzer = ret[1]
             rust_analyzer.stop(true)
             log_info "Rust Analzyer should stop"
+            stop_request_sent = true
           end,
         })
 
