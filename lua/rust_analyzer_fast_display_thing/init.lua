@@ -179,7 +179,7 @@ function M.setup(opts)
 
         if
           vim.api.nvim_buf_attach(bufnr, true, {
-            on_lines = sync(bufnr, exception_string),
+            on_lines = function() sync(bufnr, exception_string) end,
           }) == false
         then
           log_err "Couldn't attach to buffer"
