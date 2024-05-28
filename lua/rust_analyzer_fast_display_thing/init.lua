@@ -19,7 +19,7 @@ function M.setup(opts)
 
   local lspconfig = require "lspconfig"
   lspconfig.rust_analyzer.setup {
-    filetypes = { "test" },
+    root_dir = function() return rust_fast_dir end,
   }
 
   --- This function is copied from https://stackoverflow.com/a/40195356/24919919
@@ -189,8 +189,11 @@ function M.setup(opts)
             if ret == nil then return end
             if #ret ~= 1 then log_err "Multiple Rust Analzyers found" end
             local rust_analyzer = ret[1]
-            log_info("Changing rust analyzer root from " .. rust_analyzer.root_dir .. " to " .. rust_fast_dir)
-            log_info("Rust analyzer root is now " .. rust_analyzer.root_dir)
+            rust_analyzer.stop(true)
+            while not rust_analyzer.is_stopped() do
+              vim.defer_fn(function() end, 100) -- Wait for 100 millis
+            end
+            log_info "Rust Analzyer stopped!"
           end,
         })
 
