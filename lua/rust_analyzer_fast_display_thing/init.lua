@@ -20,7 +20,7 @@ function M.setup(opts)
   ---@param bufnr integer
   ---@param exception_string string
   local function sync(bufnr, exception_string)
-    log_info "Synce..."
+    log_info "Synce... "
     local content = table.concat(vim.api.nvim_buf_get_lines(bufnr, 0, -1, false), "\n")
     local dest_file_path = (rust_fast_dir .. "/" .. exception_string)
     log_info("Writing " .. content .. " into " .. dest_file_path)
@@ -199,7 +199,6 @@ function M.setup(opts)
             stop_request_sent = true
             log_info "Restarting Rust Analzyer..."
             local rust_analyzer_default = require("lspconfig.server_configurations.rust_analyzer").default_config
-            vim.lsp.buf.remove_workspace_folder(cargo_root)
             vim.lsp.buf.add_workspace_folder(rust_fast_dir)
             local client = vim.lsp.start_client {
               cmd = rust_analyzer_default.cmd,
