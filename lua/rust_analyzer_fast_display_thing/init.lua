@@ -137,6 +137,8 @@ function M.setup(opts)
     end
   end
 
+  if not exists(rust_fast_dir) then vim.fn.mkdir(rust_fast_dir) end
+
   vim.api.nvim_create_autocmd({ "VimEnter" }, {
     callback = function()
       local buffer_path = vim.fn.expand "%:p"
