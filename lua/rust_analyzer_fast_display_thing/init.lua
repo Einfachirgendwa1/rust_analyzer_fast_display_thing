@@ -22,6 +22,7 @@ function M.setup(opts)
   local function sync(bufnr, exception_string)
     local content = table.concat(vim.api.nvim_buf_get_lines(bufnr, 0, -1, false), "\n")
     local dest_file_path = (rust_fast_dir .. "/" .. exception_string)
+    log_info("Writing " .. content .. " into " .. dest_file_path)
     local dest_file = io.open(dest_file_path, "w")
     if dest_file == nil then
       log_err("Can't open " .. dest_file_path)
