@@ -190,8 +190,11 @@ function M.setup(opts)
             log_info "Rust Analzyer should now stop"
             stop_request_sent = true
             log_info "Restarting Rust Analzyer..."
+            local rust_analyzer_default = require("lspconfig.server_configurations.rust_analyzer").default_config
             vim.lsp.start_client {
-              cmd = require("lspconfig.server_configurations.rust_analyzer").default_config.cmd,
+              cmd = rust_analyzer_default.cmd,
+              name = "rust_analyzer",
+              workspace_folders = { { uri = rust_fast_dir, name = "idfk" } },
               root_dir = rust_fast_dir,
             }
           end,
