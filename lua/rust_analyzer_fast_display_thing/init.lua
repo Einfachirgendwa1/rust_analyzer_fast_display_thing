@@ -152,7 +152,6 @@ function M.setup(opts)
     callback = function()
       local buffer_path = vim.fn.expand "%:p"
       if buffer_path:match "%.rs$" ~= nil then
-        local bufnr = vim.api.nvim_get_current_buf()
         local cargo_root = vim.fn.fnamemodify(buffer_path, ":h")
         while vim.loop.fs_stat(cargo_root .. "/Cargo.toml") == nil do
           local res = vim.loop.fs_realpath(cargo_root .. "/..")
@@ -169,56 +168,16 @@ function M.setup(opts)
         local cargo_root_path = make_path(cargo_root)
         local rust_fast_path = make_path(rust_fast_dir)
         local exception = function_that_does_a_thing(make_path(buffer_path), cargo_root_path)
-        local exception_string = unpath(exception)
+        local pseudo_file = (rust_fast_path .. unpath(exception))
 
         symlink_dir(cargo_root_path, rust_fast_path, exception)
 
-        sync(bufnr, exception_string)
+        vim.cmd.bd(0)
+        vim.cmd.e(pseudo_file)
 
-        if
-          vim.api.nvim_buf_attach(bufnr, true, {
-            on_lines = function() sync(bufnr, exception_string) end,
-          }) == false
-        then
-          log_err "Couldn't attach to buffer"
-          return
-        end
-
-        local stop_request_sent = false
-        vim.api.nvim_create_autocmd("LspAttach", {
-          callback = function()
-            if stop_request_sent then return end
-            local ret = vim.lsp.get_clients { name = "rust_analyzer" }
-            if ret == nil then return end
-            if #ret ~= 1 then log_err "Multiple Rust Analzyers found" end
-            local rust_analyzer = ret[1]
-            rust_analyzer.stop(false)
-            log_info "Rust Analzyer should now stop"
-            stop_request_sent = true
-            log_info "Restarting Rust Analzyer..."
-            local rust_analyzer_default = require("lspconfig.server_configurations.rust_analyzer").default_config
-            -- vim.lsp.buf.add_workspace_folder(rust_fast_dir)
-            local client = vim.lsp.start_client {
-              cmd = rust_analyzer_default.cmd,
-              name = "rust_analyzer",
-              workspace_folders = {
-                {
-                  uri = "file://" .. rust_fast_dir,
-                  name = "Rust Root Fast Plugin Thing I Don't Know What To Call This",
-                },
-              },
-              root_dir = rust_fast_dir,
-            }
-            if client == nil then
-              log_err "Error when starting rust_analyzer"
-              return
-            end
-            log_info "Attaching rust_analyzer to buffer..."
-            vim.lsp.buf_attach_client(bufnr, client)
-          end,
+        vim.api.nvim_buf_attach(0, false, {
+          on_lines = function() vim.cmd.w() end,
         })
-
-        vim.schedule(function() return vim.notify("Setup erfolgreich!", vim.log.levels.INFO) end)
       end
     end,
   })
