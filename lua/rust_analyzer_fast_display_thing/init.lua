@@ -1,6 +1,9 @@
 local M = {}
 
-function M.setup(_)
+---@param opts {rust_fast_dir: string?}
+function M.setup(opts)
+  local rust_fast_dir = opts.rust_fast_dir or "/var/tmp/rust_fast"
+
   vim.api.nvim_out_write "Test"
 
   ---@param msg string
@@ -14,8 +17,6 @@ function M.setup(_)
   local function log_info(msg)
     vim.schedule(function() return vim.notify(msg, vim.log.levels.INFO) end)
   end
-
-  local rust_fast_dir = "/var/tmp/rust_fast"
 
   local lspconfig = require "lspconfig"
   lspconfig.rust_analyzer.setup {
