@@ -194,7 +194,7 @@ function M.setup(opts)
             vim.lsp.start_client {
               cmd = rust_analyzer_default.cmd,
               name = "rust_analyzer",
-              workspace_folders = { { uri = rust_fast_dir, name = "idfk" } },
+              workspace_folders = { { uri = "file://" .. rust_fast_dir, name = "idfk" } },
               root_dir = rust_fast_dir,
             }
           end,
