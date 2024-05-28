@@ -191,12 +191,18 @@ function M.setup(opts)
             stop_request_sent = true
             log_info "Restarting Rust Analzyer..."
             local rust_analyzer_default = require("lspconfig.server_configurations.rust_analyzer").default_config
-            vim.lsp.start_client {
+            local client = vim.lsp.start_client {
               cmd = rust_analyzer_default.cmd,
               name = "rust_analyzer",
               workspace_folders = { { uri = "file://" .. rust_fast_dir .. "/Cargo.toml", name = "Cargo.toml" } },
               root_dir = rust_fast_dir,
             }
+            if client == nil then
+              log_err "Error when starting rust_analyzer"
+              return
+            end
+            log_info "Attaching rust_analyzer to buffer..."
+            vim.lsp.buf_attach_client(bufnr, client)
           end,
         })
 
