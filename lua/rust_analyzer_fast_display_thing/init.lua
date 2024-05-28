@@ -191,6 +191,7 @@ function M.setup(opts)
             stop_request_sent = true
             log_info "Restarting Rust Analzyer..."
             local rust_analyzer_default = require("lspconfig.server_configurations.rust_analyzer").default_config
+            vim.lsp.buf.remove_workspace_folder(cargo_root)
             vim.lsp.buf.add_workspace_folder(rust_fast_dir)
             for _, x in pairs(vim.lsp.buf.list_workspace_folders()) do
               log_info(x)
