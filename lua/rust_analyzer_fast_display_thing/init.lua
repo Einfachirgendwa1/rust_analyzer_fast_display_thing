@@ -17,11 +17,6 @@ function M.setup(opts)
     vim.schedule(function() return vim.notify(msg, vim.log.levels.INFO) end)
   end
 
-  -- local lspconfig = require "lspconfig"
-  -- lspconfig.rust_analyzer.setup {
-  --   root_dir = function() return rust_fast_dir end,
-  -- }
-
   --- This function is copied from https://stackoverflow.com/a/40195356/24919919
   local function exists(file)
     local ok, err, code = os.rename(file, file)
@@ -194,6 +189,10 @@ function M.setup(opts)
             rust_analyzer.stop(false)
             log_info "Rust Analzyer should now stop"
             stop_request_sent = true
+            log_info "Restarting Rust Analzyer..."
+            vim.lsp.start_client {
+              root_dir = rust_fast_dir,
+            }
           end,
         })
 
