@@ -1,7 +1,8 @@
 local M = {}
 
----@param opts {rust_fast_dir: string?}
+---@param opts {rust_fast_dir: string?}?
 function M.setup(opts)
+  opts = opts or {}
   local rust_fast_dir = opts.rust_fast_dir or "/var/tmp/rust_fast"
 
   vim.api.nvim_out_write "Test"
