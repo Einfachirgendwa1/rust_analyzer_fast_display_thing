@@ -5,8 +5,6 @@ function M.setup(opts)
   opts = opts or {}
   local rust_fast_dir = opts.rust_fast_dir or "/var/tmp/rust_fast"
 
-  vim.api.nvim_out_write "Test"
-
   ---@param msg string
   ---@return nil
   local function log_err(msg)
