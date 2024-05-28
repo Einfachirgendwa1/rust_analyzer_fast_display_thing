@@ -17,6 +17,20 @@ function M.setup(opts)
     vim.schedule(function() return vim.notify(msg, vim.log.levels.INFO) end)
   end
 
+  ---@param bufnr integer
+  ---@param exception_string string
+  local function sync(bufnr, exception_string)
+    local content = table.concat(vim.api.nvim_buf_get_lines(bufnr, 0, -1, false), "\n")
+    local dest_file_path = (rust_fast_dir .. "/" .. exception_string)
+    local dest_file = io.open(dest_file_path, "w")
+    if dest_file == nil then
+      log_err("Can't open " .. dest_file_path)
+      return
+    end
+    dest_file:write(content)
+    dest_file:close()
+  end
+
   --- This function is copied from https://stackoverflow.com/a/40195356/24919919
   local function exists(file)
     local ok, err, code = os.rename(file, file)
@@ -159,19 +173,11 @@ function M.setup(opts)
 
         symlink_dir(cargo_root_path, rust_fast_path, exception)
 
+        sync(bufnr, exception_string)
+
         if
           vim.api.nvim_buf_attach(bufnr, true, {
-            on_lines = function()
-              local content = table.concat(vim.api.nvim_buf_get_lines(bufnr, 0, -1, false), "\n")
-              local dest_file_path = (rust_fast_dir .. "/" .. exception_string)
-              local dest_file = io.open(dest_file_path, "w")
-              if dest_file == nil then
-                log_err("Can't open " .. dest_file_path)
-                return
-              end
-              dest_file:write(content)
-              dest_file:close()
-            end,
+            on_lines = sync(bufnr, exception_string),
           }) == false
         then
           log_err "Couldn't attach to buffer"
@@ -193,9 +199,6 @@ function M.setup(opts)
             local rust_analyzer_default = require("lspconfig.server_configurations.rust_analyzer").default_config
             vim.lsp.buf.remove_workspace_folder(cargo_root)
             vim.lsp.buf.add_workspace_folder(rust_fast_dir)
-            for _, x in pairs(vim.lsp.buf.list_workspace_folders()) do
-              log_info(x)
-            end
             local client = vim.lsp.start_client {
               cmd = rust_analyzer_default.cmd,
               name = "rust_analyzer",
